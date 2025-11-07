@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>Fin_X.Application</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Fin X.Domain\Fin X.Domain.csproj" />
+    <ProjectReference Include="..\Fin X.Dto\Fin X.Dto.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Personal.Common">
+      <HintPath>..\Libs\Personal.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Personal.Common.Domain">
+      <HintPath>..\Libs\Personal.Common.Domain.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

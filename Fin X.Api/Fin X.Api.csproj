@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Fin_X.Api</RootNamespace>
+    <UserSecretsId>309c26cc-e589-4217-bdb7-63780845a718</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>.</DockerfileContext>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+	  <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Fin X.Application\Fin X.Application.csproj" />
+    <ProjectReference Include="..\Fin X.Infra.MongoDb.Repository\Fin X.Infra.MongoDb.Repository.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Personal.Common">
+      <HintPath>..\Libs\Personal.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Personal.Common.Domain">
+      <HintPath>..\Libs\Personal.Common.Domain.dll</HintPath>
+    </Reference>
+    <Reference Include="Personal.Common.Dto">
+      <HintPath>..\Libs\Personal.Common.Dto.dll</HintPath>
+    </Reference>
+    <Reference Include="Personal.Common.Infra.MongoDb.Repository">
+      <HintPath>..\Libs\Personal.Common.Infra.MongoDb.Repository.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
