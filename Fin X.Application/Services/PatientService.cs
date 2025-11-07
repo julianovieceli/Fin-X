@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Fin_X.Domain;
 using Fin_X.Domain.Interfaces;
 using Fin_X.Dto;
+using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Personal.Common.Domain;
 using Personal.Common.Domain.Validators;
@@ -12,52 +14,49 @@ namespace Fin_X.Application.Services
     {
         private readonly IPatientRepository _patientRepository;
 
-        public PatientService(ILogger<PatientService> logger, IPatientRepository patientRepository, IMapper dataMapper) : base(logger, dataMapper)
+        private readonly IValidator<RegisterPatientDto> _patientValidator;
+
+        public PatientService(ILogger<PatientService> logger, IPatientRepository patientRepository, IMapper dataMapper,
+            IValidator<RegisterPatientDto> patientValidator) : base(logger, dataMapper)
         {
             this._patientRepository = patientRepository;
+            _patientValidator = patientValidator;
         }
 
 
 
-        public async Task<Result> RegisterAsync(RegisterPatientDto patient)
+        public async Task<Result> RegisterAsync(RegisterPatientDto registerPatientDto)
         {
+            try
+            {
+                ArgumentNullException.ThrowIfNull(registerPatientDto, "registerPatientDto");
 
-            return Result.Success;
+                var validatorResult = _patientValidator.Validate(registerPatientDto);
+                if (!validatorResult.IsValid)
+                {
+                    return Result.Failure("400", validatorResult.Errors.FirstOrDefault().ErrorMessage);//Erro q usuario ja existe com este documento.
+                }
 
-            //try
-            //{
-            //    ArgumentNullException.ThrowIfNull(registerClient, "registerClient");
+                if (await _patientRepository.GetCountByDocto(registerPatientDto.Docto) == 0)
+                {
 
-            //    var validatorResult = _clientValidator.Validate(registerClient);
-            //    if (!validatorResult.IsValid)
-            //    {
-            //        return Result.Failure("400", validatorResult.Errors.FirstOrDefault().ErrorMessage);//Erro q usuario ja existe com este documento.
-            //    }
-
-            //    if (await _clientRepository.GetCountByDocto(registerClient.Docto) == 0)
-            //    {
-
-            //        Client client = new Client(registerClient.Name, registerClient.Docto, registerClient.Age);
-
-            //        if (!await _clientRepository.Register(client))
-            //            return Result.Failure("999");
+                    Patient patient = new Patient(registerPatientDto.Name, registerPatientDto.Docto, registerPatientDto.BirthDate, registerPatientDto.PhoneNumber);
 
 
-            //        await _rabbitMqMessagingClientStrategyService.SendMessage(client);
-            //        await _azureMessagingClientService.SendMessage(client);
-            //        await _aWSMessagingClientService.SendMessage(client);
+                    patient = await _patientRepository.InsertAsync(patient);
+                    
 
+                    var response = _dataMapper.Map<ResponsePatientDto>(patient);
+                    return Result<ResponsePatientDto>.Success(response);
 
-            //        return Result.Success;
+                }
 
-            //    }
-
-            //    return Result.Failure("400", "Ja existe cliente com este documento");//Erro q usuario ja existe com este documento.
-            //}
-            //catch (Exception e)
-            //{
-            //    return Result.Failure("999", e.Message, System.Net.HttpStatusCode.InternalServerError);
-            //}
+                return Result.Failure("400", "Ja existe paciente com este documento");//Erro q usuario ja existe com este documento.
+            }
+            catch (Exception e)
+            {
+                return Result.Failure("666", e.Message);
+            }
 
         }
 
@@ -91,6 +90,48 @@ namespace Fin_X.Application.Services
             {
                 _logger.LogError(ex, "Erro ao consultar um paciente");
                 return Result.Failure("666", "Erro ao consultar um Paciente");
+            }
+        }
+
+
+        public async Task<Result> Delete(string Id)
+        {
+            try
+            {
+                ArgumentNullException.ThrowIfNull(Id, "Id");
+
+                if (await _patientRepository.Delete(Id) > 0)
+                {
+                    return Result.Success;
+                }
+
+                return Result.Failure("400", "Paciente com este Id não encontrado ou ja deletado");//Erro q usuario ja existe com este documento.
+            }
+            catch (Exception e)
+            {
+                return Result.Failure("666", e.Message);
+            }
+        }
+
+
+        public async Task<Result> GetAllPatientsAsync()
+        {
+            try
+            {
+
+                var clientList = await _patientRepository.GetAllPatientsAsync();
+
+                if (clientList.Count == 0)
+                    return Result.Failure("404", "Nenhum paciente encontrado");
+
+
+                IList<ResponsePatientDto> list = clientList.Select(c => _dataMapper.Map<ResponsePatientDto>(c)).ToList();
+
+                return Result<IList<ResponsePatientDto>>.Success(list);
+            }
+            catch
+            {
+                throw;
             }
         }
 

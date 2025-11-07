@@ -14,19 +14,26 @@ namespace Fin_X.Infra.MongoDb.Domain
 
         public string? PhoneNumber { get; set; }
 
+        public DateTime? DeletedDate { get; set; }
+
         public static PatientDocument FromDomain(Patient patient)
         {
             return new PatientDocument
             {
                 Name = patient.Name,
                 Docto = patient.Docto,
-                BirthDate = patient.BirthDate
+                BirthDate = patient.BirthDate.Date,
+                CreateDate = patient.CreateDate,
+                PhoneNumber = patient.PhoneNumber
             };
         }
 
         public Patient ToDomain()
         {
-            return new Patient(this.Name, this.Docto, this.BirthDate, this.PhoneNumber);
+            Patient patient = new Patient(this.Name, this.Docto, this.BirthDate, this.PhoneNumber);
+            patient.DocumentId = this.Id.ToString();
+
+            return patient;
         }
 
 

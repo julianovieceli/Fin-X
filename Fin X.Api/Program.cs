@@ -38,6 +38,8 @@ builder.Services.AddAutoMapper();
 builder.Services.AddServices();
 builder.Services.AddMongoDbRepositories();
 
+builder.Services.AddValidators();
+
 builder.Services.AddMongoDbContext(
     builder.Configuration.GetSection("MongoDbSettings:ConnectionString").Value!,
     builder.Configuration.GetSection("MongoDbSettings:Database").Value!

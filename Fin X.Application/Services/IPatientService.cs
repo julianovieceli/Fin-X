@@ -9,5 +9,9 @@ namespace Fin_X.Application.Services
 
         Task<Result> Get(string docto);
 
+        Task<Result> Delete(string Id);
+
+        Task<Result> GetAllPatientsAsync();
+
     }
 }
