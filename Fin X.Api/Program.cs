@@ -4,6 +4,7 @@ using Personal.Common.Utils;
 using Fin_X.Application;
 using Fin_X.Infra.MongoDb.Repository;
 using Personal.Common.Infra.MongoDb.Repository;
+using Personal.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +45,11 @@ builder.Services.AddMongoDbContext(
     builder.Configuration.GetSection("MongoDbSettings:ConnectionString").Value!,
     builder.Configuration.GetSection("MongoDbSettings:Database").Value!
     );
+
+
+builder.Services.AddBasicAuthentication(builder.Configuration);
+
+builder.Services.AddJwtTokenConfigurations(builder.Configuration);
 
 builder.Services.AddHealthChecks();
 

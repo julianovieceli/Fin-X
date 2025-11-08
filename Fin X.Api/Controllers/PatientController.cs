@@ -1,13 +1,17 @@
 using Fin_X.Application.Services;
 using Fin_X.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Personal.Common.Domain;
 using Porter.Api.Controllers;
+using static Personal.Common.Handlers.Authentication.BasicAuthenticationHandler;
 
 namespace Fin_X.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize(AuthenticationSchemes = BasicAuthenticationOptions.DefaultScheme)]
+
     public class PatientController : CustomBaseController
     {
         private readonly IPatientService _patientServive;
