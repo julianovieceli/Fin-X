@@ -8,7 +8,7 @@
 
 # 2-  Criar banco, collection e validacoes
 
-
+```
 db.createCollection("Exam");
 
 db.Exam.createIndex(
@@ -96,7 +96,7 @@ db.createCollection("PatientHistory", {
   validationLevel: "strict",
   validationAction: "error"
 }); 
-
+```
 
 
 Link [Swaggwer](http://localhost:5043/swagger/index.html)

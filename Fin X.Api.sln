@@ -5,18 +5,20 @@ VisualStudioVersion = 17.11.35431.28
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fin X.Api", "Fin X.Api\Fin X.Api.csproj", "{F1B02D74-282F-41BF-AF95-E9DD8936CFC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fin X.Domain", "Fin X.Domain\Fin X.Domain.csproj", "{B82EC501-59A9-426A-B1D9-BC0E61EC6A79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fin X.Domain", "Fin X.Domain\Fin X.Domain.csproj", "{B82EC501-59A9-426A-B1D9-BC0E61EC6A79}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fin X.Infra.MongoDb.Repository", "Fin X.Infra.MongoDb.Repository\Fin X.Infra.MongoDb.Repository.csproj", "{72A1E3E1-D6F9-4F74-A554-738F535547FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fin X.Infra.MongoDb.Repository", "Fin X.Infra.MongoDb.Repository\Fin X.Infra.MongoDb.Repository.csproj", "{72A1E3E1-D6F9-4F74-A554-738F535547FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fin X.Application", "Fin X.Application\Fin X.Application.csproj", "{D7EFFBF2-EDBB-45BB-9FE7-B8EF7886E79D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fin X.Application", "Fin X.Application\Fin X.Application.csproj", "{D7EFFBF2-EDBB-45BB-9FE7-B8EF7886E79D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fin X.Dto", "Fin X.Dto\Fin X.Dto.csproj", "{10B393BA-5BA3-439A-8175-900A4CF1F626}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fin X.Dto", "Fin X.Dto\Fin X.Dto.csproj", "{10B393BA-5BA3-439A-8175-900A4CF1F626}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{41473D18-038B-4679-870D-6A90EEF32C37}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fin X.Tests", "Fin X.Tests\Fin X.Tests.csproj", "{43BAF25F-D410-4A02-8524-A38F76F6965D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +46,10 @@ Global
 		{10B393BA-5BA3-439A-8175-900A4CF1F626}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10B393BA-5BA3-439A-8175-900A4CF1F626}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10B393BA-5BA3-439A-8175-900A4CF1F626}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43BAF25F-D410-4A02-8524-A38F76F6965D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43BAF25F-D410-4A02-8524-A38F76F6965D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43BAF25F-D410-4A02-8524-A38F76F6965D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43BAF25F-D410-4A02-8524-A38F76F6965D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
