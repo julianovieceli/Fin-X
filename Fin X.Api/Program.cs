@@ -46,8 +46,11 @@ builder.Services.AddMongoDbContext(
     builder.Configuration.GetSection("MongoDbSettings:Database").Value!
     );
 
-
+// Add Authentication Services p gerar o token JWT
 builder.Services.AddBasicAuthentication(builder.Configuration);
+
+// Add Jwt Authentication
+builder.Services.AddJwtAuthentication(builder.Configuration);
 
 builder.Services.AddJwtTokenConfigurations(builder.Configuration);
 

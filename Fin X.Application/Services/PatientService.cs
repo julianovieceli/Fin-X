@@ -13,13 +13,16 @@ namespace Fin_X.Application.Services
     public class PatientService : BaseService, IPatientService
     {
         private readonly IPatientRepository _patientRepository;
+        private readonly IPatientHistoryRepository _patientHistoryRepository;
 
         private readonly IValidator<RegisterPatientDto> _patientValidator;
 
         public PatientService(ILogger<PatientService> logger, IPatientRepository patientRepository, IMapper dataMapper,
+            IPatientHistoryRepository patientHistoryRepository,
             IValidator<RegisterPatientDto> patientValidator) : base(logger, dataMapper)
         {
             this._patientRepository = patientRepository;
+            this._patientHistoryRepository = patientHistoryRepository;
             _patientValidator = patientValidator;
         }
 
@@ -99,6 +102,10 @@ namespace Fin_X.Application.Services
             try
             {
                 ArgumentNullException.ThrowIfNull(Id, "Id");
+
+                var list = await _patientHistoryRepository.GetHistoryByPatientId(Id);
+                if (list.Count > 0)
+                    return Result.Failure("400", "Paciente possui histórico de atendimentos e não pode ser deletado.");
 
                 if (await _patientRepository.Delete(Id) > 0)
                 {

@@ -46,8 +46,6 @@ namespace Fin_X.Domain
             }
         }
 
-        public DateTime CreateDate { get; init; }
-
         public Patient(string name, string docto , DateTime birthDate, string? phoneNumber)
         {
             ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
@@ -70,7 +68,7 @@ namespace Fin_X.Domain
 
 
 
-            CreateDate = DateTime.Now;
+            base.CreateTime = DateTime.Now;
         }
 
         public void Detete()

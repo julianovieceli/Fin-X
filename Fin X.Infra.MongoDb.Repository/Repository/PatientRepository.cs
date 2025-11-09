@@ -37,7 +37,7 @@ namespace Fin_X.Infra.MongoDb.Repository.Repository
         {
             try
             {
-                var patientDocument = await base.FindAsync(d => d.Docto == docto && !d.DeletedDate.HasValue);
+                var patientDocument = await base.FindOneAsync(d => d.Docto == docto && !d.DeletedDate.HasValue);
 
                 if (patientDocument is not null)
                     return patientDocument.ToDomain();

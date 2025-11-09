@@ -4,13 +4,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Personal.Common.Domain;
 using Porter.Api.Controllers;
-using static Personal.Common.Handlers.Authentication.BasicAuthenticationHandler;
 
 namespace Fin_X.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize(AuthenticationSchemes = BasicAuthenticationOptions.DefaultScheme)]
+    [Authorize(AuthenticationSchemes = "Bearer")]
 
     public class PatientController : CustomBaseController
     {

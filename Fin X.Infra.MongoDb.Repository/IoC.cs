@@ -8,6 +8,7 @@ namespace Fin_X.Infra.MongoDb.Repository
     {
         public static IServiceCollection AddMongoDbRepositories(this IServiceCollection services)
         {
+            services.AddScoped<IPatientHistoryRepository, PatientHistoryRepository>();
             return services.AddScoped<IPatientRepository, PatientRepository>();
 
         }

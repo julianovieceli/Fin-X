@@ -23,7 +23,7 @@ namespace Fin_X.Infra.MongoDb.Domain
                 Name = patient.Name,
                 Docto = patient.Docto,
                 BirthDate = patient.BirthDate.Date,
-                CreateDate = patient.CreateDate,
+                CreateDate = patient.CreateTime,
                 PhoneNumber = patient.PhoneNumber
             };
         }
