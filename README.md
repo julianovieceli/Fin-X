@@ -53,6 +53,51 @@ db.createCollection("Patient", {
 });
 
 
+db.createCollection("PatientHistory", {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["PatientDocumentId","CreateDate", "User"],
+      properties: {
+        PatientDocumentId: { bsonType: "objectId" },
+        User: { bsonType: "string" },
+        Diagnostic: { bsonType: "string" },
+        Prescription: { bsonType: "string" },
+        CreateDate: { bsonType: "date" },
+		Exams :{
+		    bsonType: "array",
+		   items: {
+            bsonType: "object",
+            required: ["Code", "Name"],
+            properties: {
+              Code: {
+                bsonType: "string",
+                description: "must be a string and is required"
+              },
+              Name: {
+                bsonType: "string",
+                description: "must be a string and is required"
+              },
+            }
+          }
+		    
+		},
+        PlaceId: 
+        { 
+            bsonType: "int" ,
+            description: "A prioridade deve ser 1(Clinic), 2(Laboratory) ou 3(Hospital).",
+            // Você pode usar 'enum' com números também
+            enum: [1, 2, 3]
+            
+        }
+      }
+    }
+  },
+  validationLevel: "strict",
+  validationAction: "error"
+}); 
+
+
 
 Link [Swaggwer](http://localhost:5043/swagger/index.html)
 

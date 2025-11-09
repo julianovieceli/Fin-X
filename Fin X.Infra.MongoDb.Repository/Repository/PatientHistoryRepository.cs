@@ -40,6 +40,8 @@ namespace Fin_X.Infra.MongoDb.Repository.Repository
             {
                 var patientHistoryDocumentList = await base.FindAsync(d => d.PatientDocumentId.ToString() == patientDocumentId);
 
+                patientHistoryDocumentList = patientHistoryDocumentList.OrderByDescending(d => d.CreateDate).ToList();
+
 
                 return patientHistoryDocumentList.Select(p => p.ToDomain()).ToList();
             }

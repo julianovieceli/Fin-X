@@ -18,7 +18,7 @@ namespace Fin_X.Infra.MongoDb.Domain
 
         public DateTime CreateDate { get; set; }
 
-        public PlaceId PlacementId { get; set; }
+        public PlaceId PlaceId { get; set; }
 
         public static PatientHistoryDocument FromDomain(PatientHistory patientHistory)
         {
@@ -31,7 +31,7 @@ namespace Fin_X.Infra.MongoDb.Domain
 
                 CreateDate = patientHistory.CreateTime,
 
-                PlacementId = patientHistory.PlaceId,
+                PlaceId = patientHistory.PlaceId,
 
                 User = patientHistory.User,
 
@@ -47,7 +47,7 @@ namespace Fin_X.Infra.MongoDb.Domain
                 Diagnostic = this.Diagnostic,
                 Prescription = this.Prescription,
                 CreateTime = this.CreateDate,
-                PlaceId = this.PlacementId,
+                PlaceId = this.PlaceId,
                 User = this.User,
                 Exams = this.Exams?.Select(examDoc => examDoc.ToDomain()).ToList()
             };
