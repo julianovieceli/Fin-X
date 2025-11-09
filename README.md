@@ -103,5 +103,14 @@ Link [Swaggwer](http://localhost:5043/swagger/index.html)
 
 
 
+# 3 - Rodando a applicação
+    Executar o projeto Fin X.Api.
+    1- Efetuar [Login](http://localhost:5043/Login). Utilize o usuario finx e senha finx123
+    2- Cadastrar um [paciente](http://localhost:5043/Patient). Usar o JWT do response do login
+    3- Cadastrar um [Atendimento](http://localhost:5043/Patient/history)
+
+# 4 Para rodar os testes unitarios basta somente excuta-los. Projeto : Fin X.Tests
+
+
 
 
