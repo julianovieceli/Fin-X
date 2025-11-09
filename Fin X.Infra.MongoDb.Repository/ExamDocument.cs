@@ -1,17 +1,20 @@
-﻿using Personal.Common.Infra.MongoDb.Repository;
+﻿using MongoDB.Bson;
+using Personal.Common.Infra.MongoDb.Repository;
 
 namespace Fin_X.Domain
 {
     public class ExamDocument: MongoDbEntityBase
     {
+        public string Code { get; set; }
         public string Name { get; set; }
-
 
         public static ExamDocument FromDomain(Exam exam)
         {
             return new ExamDocument
             {
-                Name = exam.Name
+                Code = exam.Code,
+                Name = exam.Name,
+                Id = ObjectId.Parse(exam.DocumentId)
             };
         }
 
@@ -19,10 +22,11 @@ namespace Fin_X.Domain
         {
             Exam exam = new Exam()
             {
-                Name = this.Name
+                Name = this.Name,
+                Code = this.Code,
+                DocumentId = this.Id.ToString()
             };
 
-            exam.DocumentId = this.Id.ToString();
 
             return exam;
         }

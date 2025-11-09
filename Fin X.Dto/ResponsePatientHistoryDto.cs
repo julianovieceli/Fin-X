@@ -8,7 +8,13 @@
 
         public string? Prescription { get; set; }
 
-        public PatientHistoryPlacementId Placement { get; set; }
+        public PlaceId PlaceId { get; set; }
+
+        public string PlaceDescription { get; set; }
+
+        public DateTime RegisterDate { get; set; }
+
+        public IList<string>? Exams { get; set; }
 
     }
 }

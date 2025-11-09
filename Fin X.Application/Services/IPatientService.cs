@@ -16,5 +16,7 @@ namespace Fin_X.Application.Services
 
         Task<Result> RegisterPatientHistoryAsync(string user, RegisterPatientHistoryDto patient);
 
+        Task<Result> GetHistoryByPatientId(string patientId);
+
     }
 }

@@ -3,6 +3,7 @@ using Fin_X.Domain;
 using Fin_X.Domain.Interfaces;
 using Fin_X.Dto;
 using FluentValidation;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Personal.Common.Domain;
 using Personal.Common.Domain.Validators;
@@ -13,17 +14,50 @@ namespace Fin_X.Application.Services
     public class PatientService : BaseService, IPatientService
     {
         private readonly IPatientRepository _patientRepository;
+        private readonly IExamRepository _examRepository;
         private readonly IPatientHistoryRepository _patientHistoryRepository;
+
+        private readonly IMemoryCache _memoryCache; // Inject IMemoryCache
+
 
         private readonly IValidator<RegisterPatientDto> _patientValidator;
 
+
+        private async Task<Exam?> GetExamByCode(string code)
+        {
+            Exam? exam;
+            _logger.LogInformation($"Getting code: {code} from MC");
+            if (!_memoryCache.TryGetValue(code, out exam))
+            {
+                _logger.LogInformation($"Not found in MC, getting from Mongo");
+
+                exam = await _examRepository.GetExamByCodeAsync(code);
+                if (exam is not null)
+                {
+                    _logger.LogInformation($"Found in Mongo. Setting in MC");
+
+                    var cacheEntryOptions = new MemoryCacheEntryOptions()
+                     .SetAbsoluteExpiration(TimeSpan.FromMinutes(60));
+
+                    _memoryCache.Set(code, exam, cacheEntryOptions);
+                }
+                else
+                    _logger.LogError($"Not Found in MC even mongo");
+            }
+
+            return exam;
+        }
+
         public PatientService(ILogger<PatientService> logger, IPatientRepository patientRepository, IMapper dataMapper,
-            IPatientHistoryRepository patientHistoryRepository,
-            IValidator<RegisterPatientDto> patientValidator) : base(logger, dataMapper)
+            IPatientHistoryRepository patientHistoryRepository, IExamRepository examRepository,
+            IValidator<RegisterPatientDto> patientValidator, IMemoryCache memoryCache) : base(logger, dataMapper)
         {
             this._patientRepository = patientRepository;
             this._patientHistoryRepository = patientHistoryRepository;
+            this._examRepository = examRepository;
+
             _patientValidator = patientValidator;
+            _memoryCache = memoryCache; 
         }
 
 
@@ -126,13 +160,13 @@ namespace Fin_X.Application.Services
             try
             {
 
-                var clientList = await _patientRepository.GetAllPatientsAsync();
+                var patientList = await _patientRepository.GetAllPatientsAsync();
 
-                if (clientList.Count == 0)
+                if (patientList.Count == 0)
                     return Result.Failure("404", "Nenhum paciente encontrado");
 
 
-                IList<ResponsePatientDto> list = clientList.Select(c => _dataMapper.Map<ResponsePatientDto>(c)).ToList();
+                IList<ResponsePatientDto> list = patientList.Select(c => _dataMapper.Map<ResponsePatientDto>(c)).ToList();
 
                 return Result<IList<ResponsePatientDto>>.Success(list);
             }
@@ -155,20 +189,35 @@ namespace Fin_X.Application.Services
                 //    return Result.Failure("400", validatorResult.Errors.FirstOrDefault().ErrorMessage);//Erro q usuario ja existe com este documento.
                 //}
 
-                if(!Enum.IsDefined(typeof(Domain.PatientHistoryPlacementId), (int)registerPatientHistoryDto.PlacementId))
-                    return Result.Failure("400", $"Placement inválido: {registerPatientHistoryDto.PlacementId}. Valid places: 1 = Clinic, 2 = Laboratory, 3 = Hospital");
+                if(!Enum.IsDefined(typeof(Domain.PlaceId), (int)registerPatientHistoryDto.PlaceId))
+                    return Result.Failure("400", $"PlaceId inválido: {registerPatientHistoryDto.PlaceId}. Valid places: 1 = Clinic, 2 = Laboratory, 3 = Hospital");
 
-                Domain.PatientHistoryPlacementId patientHistoryPlacement = Enum.Parse<Domain.PatientHistoryPlacementId>(registerPatientHistoryDto.PlacementId.ToString());
+                Domain.PlaceId placeId = Enum.Parse<Domain.PlaceId>(registerPatientHistoryDto.PlaceId.ToString());
 
-                Patient patient = await _patientRepository.Get(registerPatientHistoryDto.PatientDocumentId);
+                Patient patient = await _patientRepository.Get(registerPatientHistoryDto.PatientId);
 
                 if(patient is null)
                 {
-                    return Result.Failure("400", $"Paciente não encontrado. PatientDocumentId: {registerPatientHistoryDto.PatientDocumentId}");
+                    return Result.Failure("400", $"Paciente não encontrado. PatientDocumentId: {registerPatientHistoryDto.PatientId}");
+                }
+
+                IList<Exam>? exams = new List<Exam>();
+
+                if (registerPatientHistoryDto.Exams is not null)
+                {
+                    foreach (string exam in registerPatientHistoryDto.Exams)
+                    {
+                        var examFromMc = await this.GetExamByCode(exam);
+                        if (examFromMc is null)
+                        {
+                            return Result.Failure("400", $"Exame não encontrado. ExamCode: {exam}");
+                        }
+                        exams.Add(examFromMc);
+                    }
                 }
 
                 PatientHistory patientHistory = new PatientHistory(patient, user, registerPatientHistoryDto.Diagnostic, 
-                    registerPatientHistoryDto.Prescription, patientHistoryPlacement, null);
+                    registerPatientHistoryDto.Prescription, placeId, exams);
 
 
                 PatientHistory patientHistoryInserted = await _patientHistoryRepository.InsertAsync(patientHistory);
@@ -183,6 +232,27 @@ namespace Fin_X.Application.Services
             catch (Exception e)
             {
                 return Result.Failure("666", e.Message);
+            }
+        }
+
+
+        public async Task<Result> GetHistoryByPatientId(string patientId)
+        {
+            try
+            {
+                ArgumentNullException.ThrowIfNullOrWhiteSpace(patientId);
+
+
+                var patientList = await _patientHistoryRepository.GetHistoryByPatientId(patientId);
+
+
+                IList<ResponsePatientHistoryDto> list = patientList.Select(c => _dataMapper.Map<ResponsePatientHistoryDto>(c)).ToList();
+
+                return Result<IList<ResponsePatientHistoryDto>>.Success(list);
+            }
+            catch
+            {
+                throw;
             }
         }
     }

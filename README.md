@@ -6,6 +6,52 @@
     docker pull mongo
     docker run -d --name FinXDb -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=admin -p 27017:27017 mongo:latest
 
+# 2-  Criar banco, collection e validacoes
+
+
+db.createCollection("Exam");
+
+db.Exam.createIndex(
+    { Code: 1 }, // 1 for ascending order (or -1 for descending)
+    { unique: true } // Enforce uniqueness
+);
+
+db.Exam.insertOne({
+    Name: "Tomografia", 
+    Code: "TOM"
+});
+
+db.Exam.insertOne({
+    Name: "Ressonancia", 
+    Code: "RM"
+});
+
+db.Exam.insertOne({
+    Name: "Sangue", 
+    Code: "SNG"
+});
+
+
+
+db.createCollection("Patient", {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["Name", "Docto", "CreateDate", "BirthDate"],
+      properties: {
+        Name: { bsonType: "string" },
+        Docto: { bsonType: "string" },
+        CreateDate: { bsonType: "date" },
+        BirthDate: { bsonType: "date" },
+        PhoneNumber: { bsonType: "string" },
+        DeletedDate: { bsonType: ["date", "null"] }
+      }
+    }
+  },
+  validationLevel: "strict",
+  validationAction: "error"
+});
+
 
 
 Link [Swaggwer](http://localhost:5043/swagger/index.html)

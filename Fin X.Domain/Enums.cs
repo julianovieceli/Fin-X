@@ -1,6 +1,6 @@
 ﻿namespace Fin_X.Domain
 {
-    public enum PatientHistoryPlacementId
+    public enum PlaceId
     {
         Clinic =1,
         Laboratory,

@@ -1,6 +1,6 @@
 ﻿namespace Fin_X.Dto
 {
-    public enum PatientHistoryPlacementId
+    public enum PlaceId
     {
         Clinic =1 ,
         Laboratory,

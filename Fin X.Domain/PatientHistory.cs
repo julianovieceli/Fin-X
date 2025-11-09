@@ -15,7 +15,7 @@ namespace Fin_X.Domain
 
         public IList<Exam>? Exams { get; set; }
 
-        public PatientHistoryPlacementId Placement { get; set; }
+        public PlaceId PlaceId { get; set; }
 
         public string User { get; init; }
 
@@ -23,7 +23,7 @@ namespace Fin_X.Domain
         {
             
         }
-        public PatientHistory(Patient patient, string user, string? diagnostic, string? prescription, PatientHistoryPlacementId placement, IList<Exam>? exams)
+        public PatientHistory(Patient patient, string user, string? diagnostic, string? prescription, PlaceId placeId, IList<Exam>? exams)
         {
             ArgumentNullException.ThrowIfNull(patient, nameof(patient));
 
@@ -41,8 +41,8 @@ namespace Fin_X.Domain
 
             Diagnostic = diagnostic;
             Prescription = prescription;
-            this.Exams = Exams;
-            Placement = placement;  
+            this.Exams = exams;
+            PlaceId = placeId;  
 
             base.CreateTime = DateTime.Now;
 

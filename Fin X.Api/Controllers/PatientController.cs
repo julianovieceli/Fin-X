@@ -95,5 +95,20 @@ namespace Fin_X.Api.Controllers
             return StatusCode(StatusCodes.Status201Created, ((Result<ResponsePatientHistoryDto>)result).Response);
         }
 
+        [HttpGet("history/get")]
+        public async Task<IActionResult> GetHistoryByPatientId([FromQuery]string patientId)
+        {
+            var result = await _patientServive.GetHistoryByPatientId(patientId);
+
+
+            if (result.IsFailure)
+            {
+                return base.CreateResponseFromResult(result);
+            }
+
+            return Ok(Result<IList<ResponsePatientHistoryDto>>.Success(((Result<IList<ResponsePatientHistoryDto>>)result).Response));
+        }
+
+
     }
 }
