@@ -1,4 +1,5 @@
 using AutoMapper;
+using Fin_X.Application.Api;
 using Fin_X.Application.Services;
 using Fin_X.Domain;
 using Fin_X.Domain.Interfaces;
@@ -10,7 +11,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Personal.Common.Domain;
 
-namespace Fin_X.Tests
+namespace Fin_X.Tests.UnitTests
 {
     public class PatientServiceTests
     {
@@ -22,13 +23,14 @@ namespace Fin_X.Tests
         private readonly Mock<IMapper> _mockMapper;
         private readonly Mock<IValidator<RegisterPatientDto>> _mockPatientValidator;
         private readonly Mock<IMemoryCache> _mockMemoryCache;
+        private readonly Mock<IBrasilApiService> _mockbrasilApiServiceMock;
 
         // Service Under Test
         private readonly PatientService _service;
 
         public PatientServiceTests()
         {
-            
+
             _mockLogger = new Mock<ILogger<PatientService>>();
             _mockPatientRepository = new Mock<IPatientRepository>();
             _mockPatientHistoryRepository = new Mock<IPatientHistoryRepository>();
@@ -36,6 +38,7 @@ namespace Fin_X.Tests
             _mockMapper = new Mock<IMapper>();
             _mockPatientValidator = new Mock<IValidator<RegisterPatientDto>>();
             _mockMemoryCache = new Mock<IMemoryCache>();
+            _mockbrasilApiServiceMock = new Mock<IBrasilApiService>();
 
             _service = new PatientService(
                 _mockLogger.Object,
@@ -43,6 +46,8 @@ namespace Fin_X.Tests
                 _mockMapper.Object,
                 _mockPatientHistoryRepository.Object,
                 _mockExamRepository.Object,
+                _mockbrasilApiServiceMock.Object,
+
                 _mockPatientValidator.Object,
                 _mockMemoryCache.Object
             );

@@ -18,5 +18,8 @@ namespace Fin_X.Application.Services
 
         Task<Result> GetHistoryByPatientId(string patientId);
 
+
+        Task<Result> GetAddressExternalApi(string cep);
+
     }
 }

@@ -56,6 +56,8 @@ builder.Services.AddJwtTokenConfigurations(builder.Configuration);
 
 builder.Services.AddHealthChecks();
 
+builder.Services.AddHttpClient(builder.Configuration);
+
 builder.Services.AddMemoryCache(); // Register IMemoryCache
 
 

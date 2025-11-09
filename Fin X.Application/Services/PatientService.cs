@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Fin_X.Application.Api;
 using Fin_X.Domain;
 using Fin_X.Domain.Interfaces;
 using Fin_X.Dto;
@@ -16,7 +17,7 @@ namespace Fin_X.Application.Services
         private readonly IPatientRepository _patientRepository;
         private readonly IExamRepository _examRepository;
         private readonly IPatientHistoryRepository _patientHistoryRepository;
-
+        private readonly IBrasilApiService _brasilApiService;
         private readonly IMemoryCache _memoryCache; // Inject IMemoryCache
 
 
@@ -50,12 +51,14 @@ namespace Fin_X.Application.Services
 
         public PatientService(ILogger<PatientService> logger, IPatientRepository patientRepository, IMapper dataMapper,
             IPatientHistoryRepository patientHistoryRepository, IExamRepository examRepository,
+            IBrasilApiService brasilApiService,
             IValidator<RegisterPatientDto> patientValidator, IMemoryCache memoryCache) : base(logger, dataMapper)
         {
             this._patientRepository = patientRepository;
             this._patientHistoryRepository = patientHistoryRepository;
             this._examRepository = examRepository;
 
+            _brasilApiService = brasilApiService;
             _patientValidator = patientValidator;
             _memoryCache = memoryCache; 
         }
@@ -249,6 +252,27 @@ namespace Fin_X.Application.Services
                 IList<ResponsePatientHistoryDto> list = patientList.Select(c => _dataMapper.Map<ResponsePatientHistoryDto>(c)).ToList();
 
                 return Result<IList<ResponsePatientHistoryDto>>.Success(list);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+
+
+        public async Task<Result> GetAddressExternalApi(string cep)
+        {
+            try
+            {
+                ArgumentNullException.ThrowIfNullOrWhiteSpace(cep);
+
+
+                var result = await _brasilApiService.GetAddress(cep);
+
+
+                
+                return result;
             }
             catch
             {

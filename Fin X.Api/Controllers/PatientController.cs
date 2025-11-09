@@ -110,5 +110,22 @@ namespace Fin_X.Api.Controllers
         }
 
 
+
+
+        [HttpGet("api/BrasilApi/CepV2/{cep}")]
+        public async Task<IActionResult> GetAddressExternalApi(string cep)
+        {
+            var result = await _patientServive.GetAddressExternalApi(cep);
+
+
+            if (result.IsFailure)
+            {
+                return base.CreateResponseFromResult(result);
+            }
+
+            return Ok(Result<ResponseSucessAddressDto>.Success(((Result<ResponseSucessAddressDto>)result).Response));
+        }
+
+
     }
 }
