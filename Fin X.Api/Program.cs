@@ -5,6 +5,8 @@ using Fin_X.Application;
 using Fin_X.Infra.MongoDb.Repository;
 using Personal.Common.Infra.MongoDb.Repository;
 using Personal.Common;
+using Microsoft.OpenApi.Models;
+using Fin_X.Api.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,7 +35,40 @@ builder.Services.AddControllers()
           options.JsonSerializerOptions.Converters.Add(new CustomDateTimeConverter());
       }); ;
 
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "API Fin X", Version = "v1" });
+
+    // --- 1. JWT Bearer Token Authentication ---
+    var jwtSecurityScheme = new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Enter JWT Bearer token",
+        Reference = new OpenApiReference
+        {
+            Type = ReferenceType.SecurityScheme,
+            Id = "Bearer"
+        }
+    };
+    c.AddSecurityDefinition("Bearer", jwtSecurityScheme);
+
+    // --- 2. Basic Authentication ---
+    var basicSecurityScheme = new OpenApiSecurityScheme
+    {
+        Name = "Authorization (Basic)",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Basic",
+        In = ParameterLocation.Header,
+        Description = "Basic Auth: Enter username:password encoded in Base64 (e.g., Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==)"
+    };
+    c.AddSecurityDefinition("BasicAuthentication", basicSecurityScheme);
+
+    c.OperationFilter<AuthorizeCheckOperationFilter>();
+});
 
 builder.Services.AddAutoMapper();
 builder.Services.AddServices();
