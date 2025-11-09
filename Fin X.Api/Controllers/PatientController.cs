@@ -76,5 +76,24 @@ namespace Fin_X.Api.Controllers
             }
             return Ok();
         }
+
+
+
+        [HttpPost("history/", Name = "PostPatientHistory")]
+        public async Task<IActionResult> RegisterHistory(RegisterPatientHistoryDto registerPatientHistoryDto)
+        {
+            var username = User.Identity?.Name;
+
+            var result = await _patientServive.RegisterPatientHistoryAsync(username, registerPatientHistoryDto);
+
+
+            if (result.IsFailure)
+            {
+                return base.CreateResponseFromResult(result);
+
+            }
+            return StatusCode(StatusCodes.Status201Created, ((Result<ResponsePatientHistoryDto>)result).Response);
+        }
+
     }
 }

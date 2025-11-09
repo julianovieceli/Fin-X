@@ -13,5 +13,8 @@ namespace Fin_X.Application.Services
 
         Task<Result> GetAllPatientsAsync();
 
+
+        Task<Result> RegisterPatientHistoryAsync(string user, RegisterPatientHistoryDto patient);
+
     }
 }

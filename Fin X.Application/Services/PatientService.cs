@@ -143,6 +143,47 @@ namespace Fin_X.Application.Services
         }
 
 
+        public async Task<Result> RegisterPatientHistoryAsync(string user, RegisterPatientHistoryDto registerPatientHistoryDto)
+        {
+            try
+            {
+                ArgumentNullException.ThrowIfNull(registerPatientHistoryDto, "registerPatientHistoryDto");
 
+                //var validatorResult = _patientValidator.Validate(registerPatientDto);
+                //if (!validatorResult.IsValid)
+                //{
+                //    return Result.Failure("400", validatorResult.Errors.FirstOrDefault().ErrorMessage);//Erro q usuario ja existe com este documento.
+                //}
+
+                if(!Enum.IsDefined(typeof(Domain.PatientHistoryPlacementId), (int)registerPatientHistoryDto.PlacementId))
+                    return Result.Failure("400", $"Placement inválido: {registerPatientHistoryDto.PlacementId}. Valid places: 1 = Clinic, 2 = Laboratory, 3 = Hospital");
+
+                Domain.PatientHistoryPlacementId patientHistoryPlacement = Enum.Parse<Domain.PatientHistoryPlacementId>(registerPatientHistoryDto.PlacementId.ToString());
+
+                Patient patient = await _patientRepository.Get(registerPatientHistoryDto.PatientDocumentId);
+
+                if(patient is null)
+                {
+                    return Result.Failure("400", $"Paciente não encontrado. PatientDocumentId: {registerPatientHistoryDto.PatientDocumentId}");
+                }
+
+                PatientHistory patientHistory = new PatientHistory(patient, user, registerPatientHistoryDto.Diagnostic, 
+                    registerPatientHistoryDto.Prescription, patientHistoryPlacement, null);
+
+
+                PatientHistory patientHistoryInserted = await _patientHistoryRepository.InsertAsync(patientHistory);
+                patientHistoryInserted.Patient = patient;
+
+
+                var response = _dataMapper.Map<ResponsePatientHistoryDto>(patientHistoryInserted);
+                return Result<ResponsePatientHistoryDto>.Success(response);
+
+
+            }
+            catch (Exception e)
+            {
+                return Result.Failure("666", e.Message);
+            }
+        }
     }
 }

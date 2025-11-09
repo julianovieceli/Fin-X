@@ -51,6 +51,24 @@ namespace Fin_X.Infra.MongoDb.Repository.Repository
             }
         }
 
+        public async Task<Patient> Get(string documentId)
+        {
+            try
+            {
+                var patient = await base.FindOneAsync(d => d.Id.ToString() == documentId && !d.DeletedDate.HasValue);
+
+                if (patient is not null)
+                    return patient.ToDomain();
+
+                return null;
+
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public async Task<List<Patient>> GetAllPatientsAsync()
         {
             try

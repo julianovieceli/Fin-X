@@ -14,6 +14,18 @@ namespace Porter.Application.Mapping
             CreateMap<ResponsePatientDto, Patient>()
                 .ForMember(to => to.DocumentId, opt => opt.MapFrom(from => from.Id))
                 .ReverseMap();
+
+
+            CreateMap<RegisterPatientHistoryDto, PatientHistory>()
+                .ForMember(to => to.Placement, opt => opt.MapFrom(from => from.PlacementId))
+                .ReverseMap();
+
+
+
+            CreateMap<PatientHistory, ResponsePatientHistoryDto>()
+                .ForMember(to => to.Placement, opt => opt.MapFrom(from => from.Placement))
+                .ForMember(to => to.Id, opt => opt.MapFrom(from => from.DocumentId))
+                .ReverseMap();
         }
     }
 }

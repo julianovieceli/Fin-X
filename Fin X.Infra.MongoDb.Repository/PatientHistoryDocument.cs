@@ -16,7 +16,7 @@ namespace Fin_X.Infra.MongoDb.Domain
 
         public DateTime CreateDate { get; set; }
 
-        public PatientHistoryPlacement Placement { get; set; }
+        public PatientHistoryPlacementId Placement { get; set; }
 
         public static PatientHistoryDocument FromDomain(PatientHistory patientHistory)
         {

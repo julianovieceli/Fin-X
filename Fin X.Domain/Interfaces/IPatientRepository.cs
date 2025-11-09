@@ -8,6 +8,8 @@ namespace Fin_X.Domain.Interfaces
 
         Task<Patient> GetByDocto(string docto);
 
+        Task<Patient> Get(string documentId);
+
         Task<long> GetCountByDocto(string docto);
 
         Task<long> Delete(string documentId);
