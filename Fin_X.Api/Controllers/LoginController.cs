@@ -21,7 +21,7 @@ namespace Fin_X.Api.Controllers
         }
 
      
-        [HttpPost(Name = "Login")]
+        [HttpPost("/api/auth/login")]
         [Authorize(AuthenticationSchemes = BasicAuthenticationOptions.DefaultScheme)]
         public IActionResult Login()
         {

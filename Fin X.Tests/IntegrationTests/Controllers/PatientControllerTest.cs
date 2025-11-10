@@ -30,7 +30,7 @@ namespace Fin_X.Tests.IntegrationTests.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", base64EncodedAuthenticationString);
 
 
-            var response = await _client.PostAsync("/login", null);
+            var response = await _client.PostAsync("/api/auth/login", null);
 
             response.EnsureSuccessStatusCode();
 

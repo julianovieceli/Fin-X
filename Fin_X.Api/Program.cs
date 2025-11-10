@@ -67,6 +67,31 @@ builder.Services.AddSwaggerGen(c =>
     };
     c.AddSecurityDefinition("BasicAuthentication", basicSecurityScheme);
 
+    // Adds JWT Bearer token security requirement
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+            },
+            Array.Empty<string>()
+        }
+    });
+
+    // Adds Basic Authentication security requirement
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "BasicAuthentication" }
+            },
+            Array.Empty<string>()
+        }
+    });
+
+
     c.OperationFilter<AuthorizeCheckOperationFilter>();
 });
 

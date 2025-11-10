@@ -5,45 +5,55 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Fin_X.Api.Swagger;
 
-public class AuthorizeCheckOperationFilter : IOperationFilter
-{
-    public void Apply(OpenApiOperation operation, OperationFilterContext context)
+
+    public class AuthorizeCheckOperationFilter : IOperationFilter
     {
-        // 1. Verifica se a ação ou o controlador tem o atributo [Authorize]
-        var hasAuthorize = context.MethodInfo.DeclaringType?.GetCustomAttributes(true)
-            .OfType<AuthorizeAttribute>().Any() ?? false;
-
-        var methodHasAuthorize = context.MethodInfo.GetCustomAttributes(true)
-            .OfType<AuthorizeAttribute>().Any();
-
-        if (hasAuthorize || methodHasAuthorize)
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            // 2. Cria a referência de segurança para o esquema 'Bearer' (JWT)
-            var jwtSecurityScheme = new OpenApiSecurityScheme
+            // Check for Authorize attribute on the method or controller
+            var hasAuthorize = context.MethodInfo.DeclaringType.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any() ||
+                               context.MethodInfo.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any();
+
+            if (hasAuthorize)
             {
-                Reference = new OpenApiReference
+                // Initialize the security requirement list
+                operation.Security = new List<OpenApiSecurityRequirement>();
+
+                // 1. Add JWT Bearer requirement
+                operation.Security.Add(new OpenApiSecurityRequirement
+            {
                 {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer" // Usa o ID definido em AddSecurityDefinition
-                },
-                Scheme = "oauth2" // Protocolo
-            };
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer" // Matches AddSecurityDefinition ID
+                        }
+                    },
+                    Array.Empty<string>()
+                }
+            });
 
-            // 3. Aplica o requisito de segurança à operação (endpoint)
-            operation.Security = new List<OpenApiSecurityRequirement>
-        {
-            new OpenApiSecurityRequirement
+                // 2. Add Basic Authentication requirement
+                operation.Security.Add(new OpenApiSecurityRequirement
             {
-                { jwtSecurityScheme, new List<string>() }
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "BasicAuthentication" // Matches AddSecurityDefinition ID
+                        }
+                    },
+                    Array.Empty<string>()
+                }
+            });
+
+                // NOTE: If your API is configured to accept EITHER JWT OR Basic Auth, 
+                // the above code is correct. If you wanted them to be a single, combined 
+                // requirement (less common), the approach would be different.
             }
-        };
-
-            // Opcional: Adicionar um alerta visual para o desenvolvedor
-            operation.Responses.Add("401", new OpenApiResponse { Description = "Unauthorized" });
         }
-
-        // Se você precisar que o Basic Auth seja aplicado se o endpoint não for JWT,
-        // você pode adicionar lógica condicional aqui. 
-        // No entanto, é mais comum usar apenas um esquema de segurança principal (JWT).
     }
-}
