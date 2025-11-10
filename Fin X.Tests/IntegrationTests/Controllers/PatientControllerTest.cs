@@ -109,6 +109,51 @@ namespace Fin_X.Tests.IntegrationTests.Controllers
             Assert.True(response.StatusCode == System.Net.HttpStatusCode.Created);
 
         }
+
+
+
+        [Fact]
+        public async Task GetPatientByDocto_Sucess()
+        {
+
+            string token = await this.GetToken();
+
+            // Arrange
+            Random random = new Random();
+            _fixture.Customize<RegisterPatientDto>(c => c
+                .With(x => x.Docto, Constants.Docto)
+                .With(x => x.PhoneNumber, Constants.Phone)
+                .With(x => x.BirthDate, DateTime.Now.AddYears(-1 * random.Next(50)))
+                );
+
+            var newPatientDto = _fixture.Create<RegisterPatientDto>();
+
+
+
+            // Convert DTO to JSON content
+            var content = new StringContent(System.Text.Json.JsonSerializer.Serialize(newPatientDto),
+                                             System.Text.Encoding.UTF8, "application/json");
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+
+            // Act
+            // 5. Send the request to your API endpoint
+            var response = await _client.PostAsync("/Patient", content);
+
+            // Assert
+            Assert.True(response.StatusCode == System.Net.HttpStatusCode.Created);
+
+
+            response = await _client.GetAsync($"/Patient?docto={newPatientDto.Docto}");
+
+            // Assert
+            Assert.True(response.StatusCode == System.Net.HttpStatusCode.OK);
+
+
+
+
+        }
     }
 
 

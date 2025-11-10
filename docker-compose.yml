@@ -1,0 +1,36 @@
+services:
+  finx.api:
+    container_name: finx.api
+    image: ${DOCKER_REGISTRY-}finxapi
+    build:
+      context: Fin X.Api
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - UserAuthenticationSettings:User="finx"
+      - UserAuthenticationSettings:Password="finx123"
+  
+    ports:
+      - "8080"
+      - "8081"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+    depends_on:
+      - mongodb_finx
+
+  mongodb_finx:
+    image: mongo:latest
+    container_name: mongodb_finx
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:

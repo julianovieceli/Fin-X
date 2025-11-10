@@ -7,7 +7,7 @@
     <RootNamespace>Fin_X.Api</RootNamespace>
     <UserSecretsId>309c26cc-e589-4217-bdb7-63780845a718</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <DockerfileContext>.</DockerfileContext>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,13 +20,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Fin X.Application\Fin X.Application.csproj" />
-    <ProjectReference Include="..\Fin X.Infra.MongoDb.Repository\Fin X.Infra.MongoDb.Repository.csproj" />
+    <ProjectReference Include="..\Fin X.Application\Fin_X.Application.csproj" />
+    <ProjectReference Include="..\Fin X.Infra.MongoDb.Repository\Fin_X.Infra.MongoDb.Repository.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="Personal.Common">
       <HintPath>..\Libs\Personal.Common.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Personal.Common.Domain">
       <HintPath>..\Libs\Personal.Common.Domain.dll</HintPath>

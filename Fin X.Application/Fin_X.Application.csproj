@@ -16,10 +16,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Fin X.Domain\Fin X.Domain.csproj" />
-    <ProjectReference Include="..\Fin X.Dto\Fin X.Dto.csproj" />
+    <ProjectReference Include="..\Fin X.Domain\Fin_X.Domain.csproj" />
+    <ProjectReference Include="..\Fin X.Dto\Fin_X.Dto.csproj" />
   </ItemGroup>
 
+  
   <ItemGroup>
     <Reference Include="Personal.Common">
       <HintPath>..\Libs\Personal.Common.dll</HintPath>

@@ -117,3 +117,5 @@ Link [Swaggwer](http://localhost:5043/swagger/index.html)
 
 
 
+docker compose -f docker-compose.yml down
+    docker compose -f docker-compose.yml up -d

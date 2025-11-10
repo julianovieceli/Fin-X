@@ -22,8 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Fin X.Api\Fin X.Api.csproj" />
-    <ProjectReference Include="..\Fin X.Application\Fin X.Application.csproj" />
+    <ProjectReference Include="..\Fin X.Api\Fin_X.Api.csproj" />
+    <ProjectReference Include="..\Fin X.Application\Fin_X.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>
