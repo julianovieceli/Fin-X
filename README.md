@@ -6,9 +6,12 @@
     docker pull mongo
     docker run -d --name FinXDb -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=admin -p 27017:27017 mongo:latest
 
-# 2-  Criar banco, collection e validacoes
+# 2-  Criar banco, collection e validacoes OBS: Este passo não é obrigatório pois o banco, collections sao criados automaticamente, porem é interssante popular 
+#     a collection Exam, e PRINCIPALMENTE criar os validators.
 
 ```
+use FinXDb;
+
 db.createCollection("Exam");
 
 db.Exam.createIndex(
