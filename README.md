@@ -117,7 +117,7 @@ Link [Swaggwer](http://localhost:5043/swagger/index.html)
 
 
 
-# 5- Para reiniciar o ambiente docker(porem ainda esta com problemas precisa de ajuste.)
+# 5- Para rodar tudo dentro do docker(docker compose)docker(porem ainda esta com problemas precisa de ajuste.)
 
     docker compose -f docker-compose.yml down
     docker compose -f docker-compose.yml up -d
