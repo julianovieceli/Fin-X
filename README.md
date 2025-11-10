@@ -107,6 +107,7 @@ Link [Swaggwer](http://localhost:5043/swagger/index.html)
 
 
 # 3 - Rodando a applicação
+# 3.1 - Importar a collection Finx.postman_collection.json no Postman para facilitar os testes.
     Executar o projeto Fin X.Api.
     1- Efetuar [Login](http://localhost:5043/Login). Utilize o usuario finx e senha finx123
     2- Cadastrar um [paciente](http://localhost:5043/Patient). Usar o JWT do response do login
@@ -116,6 +117,7 @@ Link [Swaggwer](http://localhost:5043/swagger/index.html)
 
 
 
+# 5- Para reiniciar o ambiente docker(porem ainda esta com problemas precisa de ajuste.)
 
-docker compose -f docker-compose.yml down
+    docker compose -f docker-compose.yml down
     docker compose -f docker-compose.yml up -d
