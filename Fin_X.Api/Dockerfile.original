@@ -13,10 +13,10 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Fin X.Api/Fin_X.Api.csproj", "Fin X.Api/"]
-COPY ["Fin X.Application/Fin_X.Application.csproj", "Fin X.Application/"]
-COPY ["Fin X.Domain/Fin_X.Domain.csproj", "Fin X.Domain/"]
-COPY ["Fin X.Dto/Fin_X.Dto.csproj", "Fin X.Dto/"]
-COPY ["Fin X.Infra.MongoDb.Repository/Fin_X.Infra.MongoDb.Repository.csproj", "Fin X.Infra.MongoDb.Repository/"]
+#COPY ["Fin X.Application/Fin_X.Application.csproj", "Fin X.Application/"]
+#COPY ["Fin X.Domain/Fin_X.Domain.csproj", "Fin X.Domain/"]
+#COPY ["Fin X.Dto/Fin_X.Dto.csproj", "Fin X.Dto/"]
+#COPY ["Fin X.Infra.MongoDb.Repository/Fin_X.Infra.MongoDb.Repository.csproj", "Fin X.Infra.MongoDb.Repository/"]
 RUN dotnet restore "./Fin X.Api/Fin_X.Api.csproj"
 COPY . .
 WORKDIR "/src/Fin X.Api"

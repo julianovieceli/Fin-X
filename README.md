@@ -117,7 +117,13 @@ Link [Swaggwer](http://localhost:5043/swagger/index.html)
 
 
 
-# 5- Para rodar tudo dentro do docker(docker compose)docker(porem ainda esta com problemas precisa de ajuste.)
+# 5- Para rodar tudo dentro do docker(docker compose)
 
     docker compose -f docker-compose.yml down
-    docker compose -f docker-compose.yml up -d
+    docker compose -f docker-compose.yml up -d --build -d
+
+    Executar o projeto Fin X.Api.
+    1- Efetuar [Login](http://localhost:7000/Login). Utilize o usuario finx e senha finx123
+    2- Cadastrar um [paciente](http://localhost:7000/Patient). Usar o JWT do response do login
+    3- Cadastrar um [Atendimento](http://localhost:7000/Patient/history)
+

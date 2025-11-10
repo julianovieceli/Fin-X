@@ -24,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Fin X.Api\Fin_X.Api.csproj" />
     <ProjectReference Include="..\Fin X.Application\Fin_X.Application.csproj" />
+    <ProjectReference Include="..\Fin_X.Api\Fin_X.Api.csproj" />
   </ItemGroup>
 
   <ItemGroup>

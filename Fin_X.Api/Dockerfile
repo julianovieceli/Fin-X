@@ -12,23 +12,23 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["Fin X.Api/Fin X.Api.csproj", "Fin X.Api/"]
-COPY ["Fin X.Application/Fin X.Application.csproj", "Fin X.Application/"]
-COPY ["Fin X.Domain/Fin X.Domain.csproj", "Fin X.Domain/"]
-COPY ["Fin X.Dto/Fin X.Dto.csproj", "Fin X.Dto/"]
-COPY ["Fin X.Infra.MongoDb.Repository/Fin X.Infra.MongoDb.Repository.csproj", "Fin X.Infra.MongoDb.Repository/"]
-RUN dotnet restore "./Fin X.Api/Fin X.Api.csproj"
+COPY ["Fin_X.Api/Fin_X.Api.csproj", "Fin_X.Api/"]
+COPY ["Fin X.Application/Fin_X.Application.csproj", "Fin X.Application/"]
+COPY ["Fin X.Domain/Fin_X.Domain.csproj", "Fin X.Domain/"]
+COPY ["Fin X.Dto/Fin_X.Dto.csproj", "Fin X.Dto/"]
+COPY ["Fin X.Infra.MongoDb.Repository/Fin_X.Infra.MongoDb.Repository.csproj", "Fin X.Infra.MongoDb.Repository/"]
+RUN dotnet restore "./Fin_X.Api/Fin_X.Api.csproj"
 COPY . .
-WORKDIR "/src/Fin X.Api"
-RUN dotnet build "./Fin X.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/Fin_X.Api"
+RUN dotnet build "./Fin_X.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Fin X.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./Fin_X.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Fin X.Api.dll"]
+ENTRYPOINT ["dotnet", "Fin_X.Api.dll"]
