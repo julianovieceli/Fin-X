@@ -1,0 +1,367 @@
+{
+	"info": {
+		"_postman_id": "8c6c2ac2-fbe9-4f4f-8968-7fd538dab536",
+		"name": "Finx",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3596435",
+		"_collection_link": "https://pessoal-6015.postman.co/workspace/Pessoal~1ceb4ed4-8126-4a3f-922b-8a3ec84c3a06/collection/3596435-8c6c2ac2-fbe9-4f4f-8968-7fd538dab536?action=share&source=collection_link&creator=3596435"
+	},
+	"item": [
+		{
+			"name": "Fin X",
+			"item": [
+				{
+					"name": "Paciente",
+					"item": [
+						{
+							"name": "Register",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Paulo da Silva tres\",\r\n  \"docto\": \"{{clientDocument}}\",\r\n  \"birthdate\": \"2025-11-06\",\r\n  \"PhoneNumber\": \"4899945587\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{LocalHost}}/Patient",
+									"host": [
+										"{{LocalHost}}"
+									],
+									"path": [
+										"Patient"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetByDocto",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{LocalHost}}/Patient?docto={{clientDocument}}",
+									"host": [
+										"{{LocalHost}}"
+									],
+									"path": [
+										"Patient"
+									],
+									"query": [
+										{
+											"key": "docto",
+											"value": "{{clientDocument}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DELETE",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{LocalHost}}/Patient?Id=690e8463ed3c785f709325ea",
+									"host": [
+										"{{LocalHost}}"
+									],
+									"path": [
+										"Patient"
+									],
+									"query": [
+										{
+											"key": "Id",
+											"value": "690e8463ed3c785f709325ea"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET-ALL",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{LocalHost}}/patient/fetch-all",
+									"host": [
+										"{{LocalHost}}"
+									],
+									"path": [
+										"patient",
+										"fetch-all"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET-CEP Api Externa",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{LocalHost}}/patient/api/BrasilApi/CepV2/5454545",
+									"host": [
+										"{{LocalHost}}"
+									],
+									"path": [
+										"patient",
+										"api",
+										"BrasilApi",
+										"CepV2",
+										"5454545"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{token_findx}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {},
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {},
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Token",
+					"item": [
+						{
+							"name": "Login",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{LocalHost}}/Login",
+									"host": [
+										"{{LocalHost}}"
+									],
+									"path": [
+										"Login"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "basic",
+						"basic": [
+							{
+								"key": "password",
+								"value": "finx123",
+								"type": "string"
+							},
+							{
+								"key": "username",
+								"value": "finx",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {},
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {},
+								"exec": [
+									"var token = pm.response.json();\r",
+									"console.log(token.response);\r",
+									"\r",
+									"pm.collectionVariables.set(\"token_findx\", token.response);\r",
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Histórico Medico",
+					"item": [
+						{
+							"name": "Register History",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"patientId\": \"6910d3540b3fdb48048d901a\",\r\n  \"diagnostic\": \"febre blablabla\",\r\n  \"prescription\": \"aspirina blababla\",\r\n  \"placeId\": 2,\r\n    \"exams\":[\"SNG\", \"RM\"]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{LocalHost}}/Patient/history",
+									"host": [
+										"{{LocalHost}}"
+									],
+									"path": [
+										"Patient",
+										"history"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Patient History",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{LocalHost}}/Patient/history/get?patientId=6910d3540b3fdb48048d901a",
+									"host": [
+										"{{LocalHost}}"
+									],
+									"path": [
+										"Patient",
+										"history",
+										"get"
+									],
+									"query": [
+										{
+											"key": "patientId",
+											"value": "6910d3540b3fdb48048d901a"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{token_findx}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {},
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {},
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "token_findx",
+			"value": ""
+		}
+	]
+}
