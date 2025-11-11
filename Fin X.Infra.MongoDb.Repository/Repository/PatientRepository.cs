@@ -89,7 +89,10 @@ namespace Fin_X.Infra.MongoDb.Repository.Repository
         {
             try
             {
-                return await base.CountAsync(d => d.Docto == docto && !d.DeletedDate.HasValue);
+                long total = await base.CountAsync(d => d.Docto == docto && !d.DeletedDate.HasValue);
+                _logger.LogInformation($"Total de pacientes com o documento {docto}: {total}");
+
+                return total;
 
             }
             catch

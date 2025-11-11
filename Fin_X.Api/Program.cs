@@ -1,12 +1,15 @@
-using Microsoft.AspNetCore.Mvc;
-using Personal.Common.Dto;
-using Personal.Common.Utils;
+using Fin_X.Api.Swagger;
 using Fin_X.Application;
 using Fin_X.Infra.MongoDb.Repository;
-using Personal.Common.Infra.MongoDb.Repository;
-using Personal.Common;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
-using Fin_X.Api.Swagger;
+using Personal.Common;
+using Personal.Common.Dto;
+using Personal.Common.Infra.MongoDb.Repository;
+using Personal.Common.Utils;
+using Serilog;
+using Serilog.Events;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -121,6 +124,23 @@ builder.Services.AddHttpClient(builder.Configuration);
 builder.Services.AddMemoryCache(); // Register IMemoryCache
 
 
+
+builder.Host.UseSerilog((context, services, configuration) => configuration
+            .ReadFrom.Configuration(context.Configuration)
+            .ReadFrom.Services(services)
+            .Enrich.FromLogContext()
+            .Enrich.WithMachineName()
+            .Enrich.WithThreadId()
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+             .MinimumLevel.Information() // Nível padrão para logs da sua aplicação
+            .WriteTo.Console(
+                outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {RequestId} {Message:lj}{NewLine}{Exception}"
+            )
+            //.WriteTo.File("logs/api.log", rollingInterval: RollingInterval.Day)
+        );
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -140,7 +160,27 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
+
+
+app.UseSerilogRequestLogging(options =>
+{
+    // Loga o início e o fim da requisição
+    options.MessageTemplate = "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000}ms";
+
+    // Configura o Serilog para capturar o TraceIdentifier (o ID da requisição)
+    options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
+    {
+        diagnosticContext.Set("RequestId", httpContext.TraceIdentifier);
+        // Opcional: Adicionar o usuário logado (se houver)
+        if (httpContext.User.Identity?.IsAuthenticated == true)
+        {
+            diagnosticContext.Set("UserName", httpContext.User.Identity.Name);
+        }
+    };
+});
+
 app.MapControllers();
+
 
 app.Run();
 
